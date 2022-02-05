@@ -1,10 +1,3 @@
-if [[ "$0" =~ "/zsh$" ]]; then
-    local this='boot/setup/oh-my-zsh.sh'
-else
-    local this="$(fs.ash.path "$0")"
-fi
-
-
 if [ -z "$ZSH_VERSION" ]; then
     cmd="`$(which ps) -p\$\$ -ocomm=`"
 
@@ -15,6 +8,12 @@ if [ -z "$ZSH_VERSION" ]; then
     fi
 
 else
+    if [[ "$0" =~ "/zsh$" ]]; then
+        local this='boot/setup/oh-my-zsh.sh'
+    else
+        local this="$(fs.ash.path "$0")"
+    fi
+
     function boot.strap {
         if [ -z "$ASH" ]; then
             printf " ** halt ($0): kalash root '$ASH' isn't defined\n" >&2

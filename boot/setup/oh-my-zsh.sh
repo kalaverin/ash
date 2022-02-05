@@ -1,9 +1,3 @@
-if [[ "$0" =~ "/zsh$" ]]; then
-    local this='boot/setup/oh-my-zsh.sh'
-else
-    local this="$(fs.ash.path "$0")"
-fi
-
 OH_MY_ZSH="$HOME/.oh-my-zsh"
 OH_MY_ZSH_PLUGINS="$OH_MY_ZSH/custom/plugins"
 OH_MY_ZSH_BOOTSTAP='https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh'
@@ -39,6 +33,12 @@ if [ -z "$ZSH_VERSION" ]; then
 
 else
     zmodload zsh/datetime
+
+    if [[ "$0" =~ "/zsh$" ]]; then
+        local this='boot/setup/oh-my-zsh.sh'
+    else
+        local this="$(fs.ash.path "$0")"
+    fi
 
     function deploy.ohmyzsh() {
         if [ -z "$ASH_HTTP" ]; then

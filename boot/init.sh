@@ -1,10 +1,3 @@
-if [[ "$0" =~ "/zsh$" ]]; then
-    local this='boot/init.sh'
-else
-    local this="$(fs.ash.path "$0")"
-fi
-
-
 if [ -z "$ASH_HTTP" ]; then
     if [ -x "`which curl`" ]; then
         export ASH_HTTP="`which curl` -fsSL"
@@ -46,7 +39,19 @@ else
     export ASH_UPAQ="`which zcat`"
 fi
 
+
+#
+
+
 [ -z "$sourced" ] && declare -aUg sourced=()
+
+
+if [[ "$0" =~ "/zsh$" ]]; then
+    local this='boot/init.sh'
+else
+    local this="$(fs.ash.path "$0")"
+fi
+
 
 if [[ "${sourced[(Ie)$this]}" -eq 0 ]]; then
     sourced+=("$this")

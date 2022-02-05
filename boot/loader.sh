@@ -403,7 +403,7 @@ else
 
     if [ ! -f "$ASH/boot/strap.sh" ]; then
         if [ -z "$commands[git]" ]; then
-            printf " ** halt ($0): git must be installed\n" >&2
+            printf " ** halt ($this): git must be installed\n" >&2
 
         else
             git=$commands[git]
@@ -411,7 +411,7 @@ else
             repo="${ASH_REPO:-"https://github.com/kalaverin/ash"}"
 
             if [ ! -d "$ASH" ]; then
-                printf " ++ warn ($0): initial deploy from $repo/$branch to $ASH\n" >&2
+                printf " ++ warn ($this): initial deploy from $repo/$branch to $ASH\n" >&2
                 $git \
                     clone --depth 1 \
                     --single-branch --branch "$branch" \
@@ -420,7 +420,7 @@ else
                 local ret="$?"
 
             else
-                printf " ++ info ($0): pull from $repo/$branch to $ASH\n" >&2
+                printf " ++ info ($this): pull from $repo/$branch to $ASH\n" >&2
 
                 CWD="$PWD" && builtin cd "$ASH"
 
@@ -434,7 +434,7 @@ else
                     $git pull --ff-only --no-edit --no-commit --verbose origin $branch
                     local ret="$?"
                 else
-                    printf " ** halt ($0): $ASH isn't clean, have changes\n" >&2
+                    printf " ** halt ($this): $ASH isn't clean, have changes\n" >&2
                     local ret=1
                 fi
                 builtin cd "$CWD"
