@@ -63,7 +63,7 @@ function compat.check.lib {
 
                 local openssl_path="$(fs.path.dir `find "$lookup_path" -type f -name "openssl.pc" -follow 2>/dev/null | head -n 1`)"
                 if [ ! -d "$openssl_path" ]; then
-                    printf " ** halt ($0): pkg-config $lib: nothing about openssl.pc in $lookup_path\n" >&2
+                    printf " ** fail ($0): pkg-config $lib: nothing about openssl.pc in $lookup_path\n" >&2
                     local missing="$missing $lib"
                     continue
                 fi
@@ -72,7 +72,7 @@ function compat.check.lib {
 
                 pkg-config --libs --cflags $lib 1&>/dev/null 2&>/dev/null
                 if [ "$?" -gt 0 ]; then
-                    printf " ** halt ($0): pkg-config $lib: nothing about openssl.pc in $PKG_CONFIG_PATH too\n" >&2
+                    printf " ** fail ($0): pkg-config $lib: nothing about openssl.pc in $PKG_CONFIG_PATH too\n" >&2
                     local missing="$missing $lib"
                     continue
                 fi
@@ -97,14 +97,14 @@ function compat.check.lib {
 
 function compat.version_is_greather {
     if [ -z "$1" ] || [ -z "$2" ]; then
-        printf " ** halt ($0): call without args: '$1' '$2', I need to do — what?\n" >&2
+        printf " ** fail ($0): call without args: '$1' '$2', I need to do — what?\n" >&2
         return 2
 
     elif [ "$1" != "$2" ]; then
         local version="$(printf '%s\n%s\n' "$1" "$2" | sort --version-sort | tail -n 1)"
 
         if [ "$?" -gt 0 ]; then
-            printf " ** halt ($0): something wrong with: '$1' <> '$2'\n" >&2
+            printf " ** fail ($0): something wrong with: '$1' <> '$2'\n" >&2
             return 2
 
         elif [[ "$version" -regex-match "^$2$" ]]; then

@@ -17,7 +17,7 @@ if [ -z "$ASH_HTTP" ]; then
 
     else
         unset ASH_HTTP
-        printf " ** halt ($this) fatal: install curl, wget, fetch or httpie" 1>&2
+        printf " ** fail ($this) fatal: install curl, wget, fetch or httpie" 1>&2
     fi
 fi
 

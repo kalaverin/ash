@@ -2,16 +2,16 @@ if [ -z "$ZSH_VERSION" ]; then
     cmd="`$(which ps) -p\$\$ -ocomm=`"
 
     if [ ! -x "`which zsh`" ]; then
-        printf " ** halt ($0): I was made for zsh, not for $cmd; please, install zsh\n" >&2
+        printf " ** fail ($0): I was made for zsh, not for $cmd; please, install zsh\n" >&2
     else
-        printf " ** halt ($0): I was made for zsh, not for $cmd; please change default shell: \"sudo chsh -s `which zsh` $USER\" and run again\n" >&2
+        printf " ** fail ($0): I was made for zsh, not for $cmd; please change default shell: \"sudo chsh -s `which zsh` $USER\" and run again\n" >&2
     fi
 
 elif [ -n "$SUDO_USER" ] && [ ! "$SUDO_USER" = "$USER" ]; then
-    printf " ** halt ($0): do not run me under sudo ($SUDO_USER as $USER)\n" >&2
+    printf " ** fail ($0): do not run me under sudo ($SUDO_USER as $USER)\n" >&2
 
 elif [ -n "${(M)zsh_eval_context:#file}" ]; then
-    printf " ** halt ($0): do not source me, just run me\n" >&2
+    printf " ** fail ($0): do not source me, just run me\n" >&2
     source $ASH/boot/init.sh
 
 else
@@ -23,7 +23,7 @@ else
 
     function fs.stat.mtime {
         if [ -z "$1" ]; then
-            printf " ** halt ($0): call without args, I need to do — what?\n" >&2
+            printf " ** fail ($0): call without args, I need to do — what?\n" >&2
             return 1
         fi
 
@@ -34,7 +34,7 @@ else
 
     function fs.link.read {
         if [ -z "$1" ]; then
-            printf " ** halt ($0): call without args, I need to do — what?\n" >&2
+            printf " ** fail ($0): call without args, I need to do — what?\n" >&2
             return 1
         fi
 
@@ -45,7 +45,7 @@ else
 
     function fs.path.base {
         if [ -z "$1" ]; then
-            printf " ** halt ($0): call without args, I need to do — what?\n" >&2
+            printf " ** fail ($0): call without args, I need to do — what?\n" >&2
             return 1
         fi
 
@@ -55,7 +55,7 @@ else
 
     function fs.path.dir {
         if [ -z "$1" ]; then
-            printf " ** halt ($0): call without args, I need to do — what?\n" >&2
+            printf " ** fail ($0): call without args, I need to do — what?\n" >&2
             return 1
         fi
 
@@ -69,7 +69,7 @@ else
 
     function fs.path {
         if [ -z "$1" ]; then
-            printf " ** halt ($0): call without args, I need to do — what?\n" >&2
+            printf " ** fail ($0): call without args, I need to do — what?\n" >&2
             return 1
 
         elif [ -e "$1" ]; then
@@ -124,7 +124,7 @@ else
                 printf " ++ warn ($0): realpath isn't installed, using fallback: $resolver\n" >&2
 
             else
-                printf " ** halt ($0): realpath or readlink must be installed\n" >&2
+                printf " ** fail ($0): realpath or readlink must be installed\n" >&2
                 printf "$1"
                 return 2
             fi
@@ -132,7 +132,7 @@ else
             eval "$resolver $1"
 
         else
-            printf " ** halt ($0): '$1' invalid\n" >&2
+            printf " ** fail ($0): '$1' invalid\n" >&2
             return 2
         fi
     }
@@ -140,7 +140,7 @@ else
 
     function fs.path.dir.real {
         if [ -z "$1" ]; then
-            printf " ** halt ($0): call without args, I need to do — what?\n" >&2
+            printf " ** fail ($0): call without args, I need to do — what?\n" >&2
             return 1
         fi
 
@@ -156,17 +156,17 @@ else
 
     function fs.ash.path {
         if [ -z "$1" ]; then
-            printf " ** halt ($0): call without args, I need to do — what?\n" >&2
+            printf " ** fail ($0): call without args, I need to do — what?\n" >&2
             return 1
 
         elif [ -z "$ASH" ]; then
-            printf " ** halt ($0): kalash root '$ASH' isn't defined\n" >&2
+            printf " ** fail ($0): kalash root '$ASH' isn't defined\n" >&2
             return 1
         fi
 
         local result="$(fs.path "$1")"
         if [ -z "$result" ]; then
-            printf " ** halt ($0): '$1' isn't found\n" >&2
+            printf " ** fail ($0): '$1' isn't found\n" >&2
             return 2
         fi
 
@@ -180,7 +180,7 @@ else
         let length="${#result} - ${#ashed} - 2"
         local result="${result[${#result} - $length,${#result}]}"
         if [ ! -e "$ASH/$result" ]; then
-            printf " ** halt ($0): something wrong '$1' -> '$result'\n" >&2
+            printf " ** fail ($0): something wrong '$1' -> '$result'\n" >&2
             return 3
         fi
         printf "$result"
@@ -215,13 +215,13 @@ else
     function fs.home {
         local src="$(fs.home.get)"
         if [ ! -x "$src" ]; then
-            printf " ** halt ($0): couldn't detect user HOME directory\n" >&2
+            printf " ** fail ($0): couldn't detect user HOME directory\n" >&2
             return 1
         fi
 
         local dst="$(fs.path $src)"
         if [ ! -x "$src" ]; then
-            printf " ** halt ($0): couldn't detect realpath for user HOME '$src' directory\n" >&2
+            printf " ** fail ($0): couldn't detect realpath for user HOME '$src' directory\n" >&2
             return 2
         fi
 
@@ -234,17 +234,17 @@ else
 
     function fs.ash.link {
         if [ -z "$1" ]; then
-            printf " ** halt ($0): call without args, I need to do — what?\n" >&2
+            printf " ** fail ($0): call without args, I need to do — what?\n" >&2
             return 1
 
         elif [ -z "$ASH" ]; then
-            printf " ** halt ($0): kalash root '$ASH' isn't defined\n" >&2
+            printf " ** fail ($0): kalash root '$ASH' isn't defined\n" >&2
             return 1
         fi
 
         local dst="$(fs.path "$1")"
         if [ ! -f "$dst" ] || [ ! -x "$dst" ]; then
-            printf " ** halt ($0): link target '$1' -> '$dst' isn't executable (exists?) file\n" >&2
+            printf " ** fail ($0): link target '$1' -> '$dst' isn't executable (exists?) file\n" >&2
             return 1
         fi
 
@@ -254,7 +254,7 @@ else
 
         else
             if [[ "$2" =~ "/" ]]; then
-                printf " ** halt ($0): link name '$2' couldn't contains slashes\n" >&2
+                printf " ** fail ($0): link name '$2' couldn't contains slashes\n" >&2
                 return 2
             fi
             local src="$dir/$2"
@@ -276,15 +276,15 @@ else
 
     function fs.ash.link.is {
         if [ -z "$1" ]; then
-            printf " ** halt ($0): call without args, I need to do — what?\n" >&2
+            printf " ** fail ($0): call without args, I need to do — what?\n" >&2
             return 1
 
         elif [ -n "$2" ] && [[ "$2" =~ "/" ]]; then
-            printf " ** halt ($0): link name '$2' couldn't contains slashes\n" >&2
+            printf " ** fail ($0): link name '$2' couldn't contains slashes\n" >&2
             return 1
 
         elif [ -z "$ASH" ]; then
-            printf " ** halt ($0): kalash root '$ASH' isn't defined\n" >&2
+            printf " ** fail ($0): kalash root '$ASH' isn't defined\n" >&2
             return 1
         fi
 
@@ -304,10 +304,10 @@ else
                 local src="$(fs.path "$1")"
                 local dst="$(fs.path.base "$1")"
                 if [ -z "$src" ]; then
-                    printf " ** halt ($0): something wrong with source, '$1' ($ASH) -> nothing\n" >&2
+                    printf " ** fail ($0): something wrong with source, '$1' ($ASH) -> nothing\n" >&2
 
                 elif [ -z "$dst" ]; then
-                    printf " ** halt ($0): something wrong with target, '$1' ($ASH) -> nothing\n" >&2
+                    printf " ** fail ($0): something wrong with target, '$1' ($ASH) -> nothing\n" >&2
 
                 elif [ -L "$ASH/bin/$dst" ] && [ "$src" = "$(fs.path "$ASH/bin/$dst" 2>/dev/null)" ]; then
                     printf "$src"
@@ -338,7 +338,7 @@ else
 
     function fs.path.lookup {
         if [[ "$1" =~ "/" ]]; then
-            printf " ** halt ($0): link name '$1' couldn't contains slashes\n" >&2
+            printf " ** fail ($0): link name '$1' couldn't contains slashes\n" >&2
             return 2
         fi
 
@@ -355,11 +355,11 @@ else
 
     function fs.path.which {
         if [ -z "$1" ]; then
-            printf " ** halt ($0): call without args, I need to do — what?\n" >&2
+            printf " ** fail ($0): call without args, I need to do — what?\n" >&2
             return 2
 
         elif [[ "$1" =~ "/" ]]; then
-            printf " ** halt ($0): link name '$1' couldn't contains slashes\n" >&2
+            printf " ** fail ($0): link name '$1' couldn't contains slashes\n" >&2
             return 2
 
         elif [ -z "$ASH" ]; then
@@ -390,7 +390,7 @@ else
     function fs.path.rebuild {
         local dir="$(fs.home)"
         if [ ! -x "$dir" ]; then
-            printf " ** halt ($0): couldn't detect user HOME directory\n" >&2
+            printf " ** fail ($0): couldn't detect user HOME directory\n" >&2
             return 1
         fi
 
@@ -447,7 +447,7 @@ else
 
     function fs.ash.self {
         if [ -z "$1" ]; then
-            printf " ** halt ($0): call without args, I need to do — what?\n" >&2
+            printf " ** fail ($0): call without args, I need to do — what?\n" >&2
             return 1
 
         elif [ -z "$ASH" ]; then
@@ -467,7 +467,7 @@ else
         fi
 
         if [ -z "$result" ]; then
-            printf " ** halt ($0): something wrong, '$1' ($ASH) + '$2' -> '$result'\n" >&2
+            printf " ** fail ($0): something wrong, '$1' ($ASH) + '$2' -> '$result'\n" >&2
             return 2
         fi
 
@@ -478,7 +478,7 @@ else
 
     # if [ ! -f "$ASH/boot/strap.sh" ]; then
         if [ -z "$commands[git]" ]; then
-            printf " ** halt ($this): git must be installed\n" >&2
+            printf " ** fail ($this): git must be installed\n" >&2
 
         else
             git=$commands[git]
@@ -509,7 +509,7 @@ else
                     $git pull --ff-only --no-edit --no-commit --verbose origin $branch
                     local ret="$?"
                 else
-                    printf " ** halt ($this): $ASH isn't clean, have changes\n" >&2
+                    printf " ** fail ($this): $ASH isn't clean, have changes\n" >&2
                     local ret=1
                 fi
                 builtin cd "$CWD"
