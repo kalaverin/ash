@@ -120,9 +120,7 @@ else
                 local last_fetch="$(fs.stat.mtime "$dst/.git/FETCH_HEAD" 2>/dev/null)"
                 [ -z "$last_fetch" ] && local last_fetch=0
 
-
                 let need_fetch="$EPOCHSECONDS - $fetch_every > $last_fetch"
-                echo "$EPOCHSECONDS - $fetch_every > $last_fetch // $need_fetch"
                 if [ "$need_fetch" -gt 0 ]; then
                     local verb='pull'
                     local branch="$($git --git-dir="$dst/.git" --work-tree="$dst/" rev-parse --quiet --abbrev-ref HEAD)"
