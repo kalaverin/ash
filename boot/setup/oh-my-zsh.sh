@@ -130,7 +130,7 @@ else
                         continue
 
                     else
-                        $(GIT_TERMINAL_PROMPT=0 $git --git-dir="$dst/.git" --work-tree="$dst/" pull origin "$branch")
+                        $commands[zsh] -c "GIT_TERMINAL_PROMPT=0 $git --git-dir='$dst/.git' --work-tree='$dst/'' pull origin '$branch'"
                         [ -x "`which git-restore-mtime`" ] && \
                             git-restore-mtime --skip-missing --work-tree "$dst/" --git-dir "$dst/.git/"
                     fi
