@@ -47,7 +47,7 @@ fi
 
 
 if [[ "${sourced[(Ie)$this]}" -eq 0 ]]; then
-    echo 'lol'
+    echo "lol" $this $sources
     sourced+=("$this")
 
     if [ -n "$(uname | grep -i freebsd)" ]; then
