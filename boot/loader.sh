@@ -170,7 +170,8 @@ else
             return 2
         fi
 
-        let length="${#result} - ${#ASH} - 2"
+        local ashed="$(fs.path $1)"
+        let length="${#result} - ${#ashed} - 2"
         local result="${result[${#result} - $length,${#result}]}"
         if [ ! -e "$result" ]; then
             printf " ** halt ($0): something wrong '$1' -> '$result'\n" >&2
@@ -231,7 +232,7 @@ else
             return 1
 
         elif [ -z "$ASH" ]; then
-            printf " ** halt ($0): Kalash root '$ASH' isn't defined\n" >&2
+            printf " ** halt ($0): kalash root '$ASH' isn't defined\n" >&2
             return 1
         fi
 
@@ -398,9 +399,6 @@ else
         export ASH="$HOME/${ASH_SUBDIR:-.kalash}"
     fi
 
-    # fs.path.rebuild
-    # function which { eval "fs.path.which $@"; return $? }
-
     if [ ! -f "$ASH/boot/strap.sh" ]; then
         if [ -z "$commands[git]" ]; then
             printf " ** halt ($this): git must be installed\n" >&2
@@ -447,5 +445,8 @@ else
             fi
         fi
     fi
+
+    fs.path.rebuild
+    function which { eval "fs.path.which $@"; return "$?" }
     source $ASH/boot/init.sh
 fi

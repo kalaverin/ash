@@ -53,6 +53,9 @@ else
 fi
 
 
+fs.ash.link.exists '/bin/zsh' # || fs.ash.link '/bin/zsh'
+
+
 if [[ "${sourced[(Ie)$this]}" -eq 0 ]]; then
     sourced+=("$this")
 
