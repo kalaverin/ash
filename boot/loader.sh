@@ -317,12 +317,14 @@ else
 
         else
             if [[ "$1" =~ "/" ]]; then
+                # /bin/zsh + zsh: zsh linkg points to /bin/zsh
                 local src="$(fs.path "$1")"
                 if [ "$src" = "$(fs.ash.link.is "$2" 2>/dev/null)" ]; then
                     printf "$src"
                     return 0
                 fi
             else
+                # zsh1 + zsh2: zsh2 linkg points to /bin/zsh1
                 local src="$(fs.ash.link.is "$2" 2>/dev/null)"
                 if [ -x "$src" ] && [ "$(fs.path.base "$src")" = "$1" ]; then
                     printf "$src"
