@@ -164,7 +164,7 @@ else
             return 1
         fi
 
-        local result="$(fs.path $1)"
+        local result="$(fs.path "$1")"
         if [ -z "$result" ]; then
             printf " ** halt ($0): '$1' isn't found\n" >&2
             return 2
@@ -394,7 +394,7 @@ else
         export ASH="$HOME/${ASH_SUBDIR:-.kalash}"
     fi
 
-    function fs.path.self {
+    function fs.ash.self {
         if [ -z "$1" ]; then
             printf " ** halt ($0): call without args, I need to do — what?\n" >&2
             return 1
@@ -411,7 +411,7 @@ else
                 local result="$1"
             fi
         else
-            local result="$(fs.ash.path "$10")"
+            local result="$(fs.ash.path "$1")"
             [ -z "$result" ] && local result="$0"
         fi
 
@@ -423,7 +423,7 @@ else
         printf "$result"
     }
 
-    local this="$(fs.path.self "$0", 'boot/loader.sh')"
+    local this="$(fs.ash.self "$0", 'boot/loader.sh')"
 
     # if [ ! -f "$ASH/boot/strap.sh" ]; then
         if [ -z "$commands[git]" ]; then

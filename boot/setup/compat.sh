@@ -1,7 +1,7 @@
 zmodload zsh/regex
 
 
-local this="$(fs.path.self "$0", 'boot/setup/compat.sh')"
+local this="$(fs.ash.self "$0", 'boot/setup/compat.sh')"
 
 
 req_bins=(

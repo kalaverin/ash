@@ -8,7 +8,7 @@ if [ -z "$ZSH_VERSION" ]; then
     fi
 
 else
-    local this="$(fs.path.self "$0", 'boot/strap.sh')"
+    local this="$(fs.ash.self "$0", 'boot/strap.sh')"
 
 
     function boot.strap {

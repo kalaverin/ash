@@ -35,7 +35,7 @@ else
     zmodload zsh/datetime
 
 
-    local this="$(fs.path.self "$0", 'boot/setup/oh-my-zsh.sh')"
+    local this="$(fs.ash.self "$0", 'boot/setup/oh-my-zsh.sh')"
 
 
     function deploy.ohmyzsh() {
