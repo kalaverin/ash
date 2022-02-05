@@ -393,6 +393,7 @@ else
     if [ ! -f "$ASH/boot/strap.sh" ]; then
         if [ -z "$commands[git]" ]; then
             printf " ** halt ($0): git must be installed\n" >&2
+
         else
             ash_branch="${ASH_BRANCH:-"master"}"
             ash_repo="${ASH_REPO:-"https://github.com/kalaverin/ash"}"
@@ -407,19 +408,29 @@ else
                 local ret="$?"
 
             else
+                printf " ++ info ($0): pull from $ash_repo/$ash_branch to $ASH\n" >&2
                 CWD="$PWD"
                 builtin cd "$ASH" && \
-                $commands[git] pull --ff-only --no-edit --no-commit --verbose origin $ash_branch
-                local ret="$?"
+
+                current="`git rev-parse --show-toplevel`"
+                modified="$(git ls-files --modified  "$current")$(git ls-files --deleted --others --exclude-standard "$current")"
+
+                if [ -z "$modified" ]; then
+                    $commands[git] fetch origin -fu "$ash_branch":"$ash_branch" && \
+                    $commands[git] reset --hard && \
+                    $commands[git] checkout --force --quiet $ash_branch && \
+                    $commands[git] pull --ff-only --no-edit --no-commit --verbose origin $ash_branch
+                    local ret="$?"
+                else
+                    printf " ** halt ($0): $ASH isn't clean, have changes\n" >&2
+                    local ret=1
+                fi
                 builtin cd "$CWD"
             fi
 
-            if [ "$?" -eq 0 ]; then
-                source $ASH/boot/setup/compat.sh && \
-                    compat.check && \
-                source $ASH/BOOT/strap.sh && \
-                    check_compatibility
-
+            if [ "$ret" -eq 0 ]; then
+                source $ASH/boot/strap.sh && \
+                    boot.strap && \
                 builtin cd "$HOME" && exec zsh
             fi
         fi
