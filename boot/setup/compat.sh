@@ -178,9 +178,6 @@ function compat.check() {
 
     elif [ -n "$(uname -srv | grep -i linux)" ]; then
         export ASH_PLATFORM="linux"
-        req_sys_libs=(
-            python
-        )
 
         if [ -f "/etc/debian_version" ] || [ -n "$(uname -v | grep -Pi '(debian|ubuntu)')" ]; then
             req_sys_bins=( apt )
