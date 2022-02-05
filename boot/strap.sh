@@ -30,7 +30,7 @@ else
             return 1
         fi
 
-        printf " ++ info ($0): get last commits for '$branch' to '$ASH'\n" >&2
+        printf " ++ info ($0): get last '$branch' commits to '$ASH'\n" >&2
 
         $git pull --ff-only --no-edit --no-commit origin "$branch" || return 1
 
@@ -38,7 +38,7 @@ else
         modified="$(git ls-files --modified  "$current")$(git ls-files --deleted --others --exclude-standard "$current")"
 
         $git update-index --refresh &>/dev/null
-        if [ "$?" -gt 0 ] || [ -z "$modified" ]; then
+        if [ "$?" -gt 0 ] || [ -n "$modified" ]; then
             printf " ** halt ($0): $ASH isn't clean, have changes\n" >&2
             return 1
 
