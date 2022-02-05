@@ -283,6 +283,31 @@ else
             printf " ** halt ($0): kalash root '$ASH' isn't defined\n" >&2
             return 1
         fi
+
+        if [ -z "$2" ]; then
+            if [[ "$1" =~ "/" ]]; then
+                # /bin/zsh checks for link zsh points to /bin/zsh
+                local src="$(fs.path "$1")"
+                local dst="$(fs.path.base "$1")"
+                if [ -z "$src" ]; then
+                    printf " ** halt ($0): something wrong with source, '$1' ($ASH) -> nothing\n" >&2
+                    return 1
+
+                elif [ -z "$dst" ]; then
+                    printf " ** halt ($0): something wrong with target, '$1' ($ASH) -> nothing\n" >&2
+                    return 1
+
+                elif [ -L "$ASH/bin/$dst" ] && [ "$src" = "$(fs.path "$ASH/bin/$dst")" ]; then
+                    printf "$src"
+                    return 0
+                fi
+                return 1
+            else
+                # zsh checks for link zsh found and valid
+            fi
+        else
+            echo '' >&2
+        fi
     }
 
 
