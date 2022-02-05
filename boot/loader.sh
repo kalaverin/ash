@@ -279,42 +279,58 @@ else
             printf " ** halt ($0): call without args, I need to do — what?\n" >&2
             return 1
 
+        elif [ -n "$2" ] && [[ "$2" =~ "/" ]]; then
+            printf " ** halt ($0): link name '$2' couldn't contains slashes\n" >&2
+            return 1
+
         elif [ -z "$ASH" ]; then
             printf " ** halt ($0): kalash root '$ASH' isn't defined\n" >&2
             return 1
         fi
 
         if [ -z "$2" ]; then
-            if [[ "$1" =~ "/" ]]; then
-                # /bin/zsh checks for link zsh points to /bin/zsh
-                local src="$(fs.path "$1")"
-                local dst="$(fs.path.base "$1")"
-                if [ -z "$src" ]; then
-                    printf " ** halt ($0): something wrong with source, '$1' ($ASH) -> nothing\n" >&2
-                    return 1
-
-                elif [ -z "$dst" ]; then
-                    printf " ** halt ($0): something wrong with target, '$1' ($ASH) -> nothing\n" >&2
-                    return 1
-
-                elif [ -L "$ASH/bin/$dst" ] && [ "$src" = "$(fs.path "$ASH/bin/$dst")" ]; then
-                    printf "$src"
-                    return 0
-                fi
-                return 1
-            else
+            if [[ ! "$1" =~ "/" ]]; then
+                # zsh checks for link zsh exists and points to executive
                 if [ -L "$ASH/bin/$1" ]; then
-                    local src="$(fs.path "$1")"
+                    local src="$(fs.path "$ASH/bin/$1" 2>/dev/null)"
                     if [ -x "$src" ]; then
                         printf "$src"
                         return 0
                     fi
                 fi
-                return 1
+
+            else
+                # /bin/zsh checks for link zsh points to /bin/zsh
+                local src="$(fs.path "$1")"
+                local dst="$(fs.path.base "$1")"
+                if [ -z "$src" ]; then
+                    printf " ** halt ($0): something wrong with source, '$1' ($ASH) -> nothing\n" >&2
+
+                elif [ -z "$dst" ]; then
+                    printf " ** halt ($0): something wrong with target, '$1' ($ASH) -> nothing\n" >&2
+
+                elif [ -L "$ASH/bin/$dst" ] && [ "$src" = "$(fs.path "$ASH/bin/$dst" 2>/dev/null)" ]; then
+                    printf "$src"
+                    return 0
+                fi
             fi
+
         else
-            echo '' >&2
+            if [[ "$1" =~ "/" ]]; then
+                local src="$(fs.path "$1")"
+                if [ "$src" = "$(fs.ash.link.is "$2" 2>/dev/null)" ]; then
+                    printf "$src"
+                    return 0
+                fi
+            else
+                local src="$(fs.ash.link.is "$2" 2>/dev/null)"
+                if [ -x "$src" ] && [ "$(fs.path.base "$src")" = "$1" ]; then
+                    printf "$src"
+                    return 0
+                fi
+            fi
         fi
+        return 1
     }
 
 

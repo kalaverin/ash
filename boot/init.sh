@@ -47,18 +47,6 @@ fi
 local this="$(fs.ash.self "$0" 'boot/init.sh')"
 
 
-echo '12312312312312123'
-echo "`fs.ash.link.is 'zsh'` zsh $?"
-echo '12312312312312123'
-echo "`fs.ash.link.is '/bin/zsh'` /bin/zsh $?"
-
-echo '12312312312312123'
-echo "`fs.ash.link.is 'zsh' 'zsh'` zsh zsh$?"
-echo '12312312312312123'
-echo "`fs.ash.link.is '/bin/zsh' 'zsh'` /bin/zsh zsh$?"
-echo '12312312312312123'
-
-
  # || fs.ash.link '/bin/zsh'
 
 
