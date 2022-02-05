@@ -120,6 +120,8 @@ else
                 local last_fetch="$(fs.stat.mtime "$dst/.git/FETCH_HEAD" 2>/dev/null)"
                 [ -z "$last_fetch" ] && local last_fetch=0
 
+                echo "$EPOCHSECONDS - $fetch_every > $last_fetch"
+
                 let need_fetch="$EPOCHSECONDS - $fetch_every > $last_fetch"
                 if [ "$need_fetch" -gt 0 ]; then
                     local verb='pull'
@@ -142,7 +144,7 @@ else
             [ $? -gt 0 ] \
                 && local result="--" \
                 || local result="++"
-            printf " $result info ($0): fetch $pkg'\n" >&2
+            printf " $result info ($0): fetch $pkg\n" >&2
         done
 
         printf " ++ info ($0): total ${#OH_MY_ZSH_PACKAGES[@]} plugins'\n" >&2
