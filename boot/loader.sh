@@ -173,6 +173,7 @@ else
         local ashed="$(fs.path $ASH)"
         if [[ ! "$result" -regex-match "^$ashed" ]]; then
             printf " ++ warn ($0): source '$1' not in '$ashed'\n" >&2
+            printf "$result"
             return 2
         fi
 
@@ -423,7 +424,7 @@ else
         printf "$result"
     }
 
-    local this="$(fs.ash.self "$0", 'boot/loader.sh')"
+    local this="$(fs.ash.self "$0" 'boot/loader.sh')"
 
     # if [ ! -f "$ASH/boot/strap.sh" ]; then
         if [ -z "$commands[git]" ]; then
