@@ -50,13 +50,33 @@ else
         fi
 
         source $ASH/boot/init.sh && \
+
         printf " ++ info ($0): works in $PWD, deploy and configure oh-my-zsh\n" >&2
         source $ASH/boot/setup/oh-my-zsh.sh && \
             deploy.ohmyzsh && \
-            deploy.ohmyzsh.extensions
+            deploy.ohmyzsh.extensions || return 1
+
+        boot.copy_config || return 1
+
         # source run/units/binaries.sh && \
         # source run/units/configs.sh && \
         # source lib/python.sh && \
         # source lib/rust.sh
+    }
+
+    function boot.copy_config {
+        dst="$HOME/.zshrc.`date "%Y.%m%d.%H%M"`"
+
+        if [ -L "$HOME/.zshrc" ]; then
+            # .zshrc is link
+            echo " + move .zshrc link to $dst"
+
+        elif [ -f "$HOME/.zshrc" ]; then
+            # .zshrc exists
+            echo " + backup old .zshrc to $dst"
+        fi
+        cp -L "$HOME/.zshrc" "$dst"
+        # rm "$HOME/.zshrc" 2>/dev/null
+        return "$?"
     }
 fi

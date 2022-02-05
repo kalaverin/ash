@@ -38,7 +38,7 @@ else
     local this="$(fs.ash.self "$0" 'boot/setup/oh-my-zsh.sh')"
 
 
-    function deploy.ohmyzsh() {
+    function deploy.ohmyzsh {
         if [ -z "$ASH_HTTP" ]; then
             printf " ** fail ($0): HTTP getter undefined\n" >&2
             return 1
@@ -87,7 +87,7 @@ else
     }
 
 
-    function deploy.ohmyzsh.extensions() {
+    function deploy.ohmyzsh.extensions {
         if [ -z "$commands[git]" ]; then
             printf " ** fail ($this): git must be installed\n" >&2
             return 1
@@ -145,60 +145,7 @@ else
             printf " $result info ($0): fetch $pkg\n" >&2
         done
 
-        printf " ++ info ($0): total ${#OH_MY_ZSH_PACKAGES[@]} plugins'\n" >&2
-        return 0
-    }
-
-
-    function save_previous_installation() {
-        if [ -d "$ZSH" ]; then
-            # another josh installation found, move backup
-
-            dst="$ZSH-`date "+%Y.%m%d.%H%M"`-backup"
-            echo " + another Josh found, backup to $dst"
-
-            mv "$ZSH" "$dst"
-            if [ $? -gt 0 ]; then
-                echo " - warning: backup $ZSH failed"
-                return 4
-            fi
-        fi
-
-        if [ -f "$HOME/.zshrc" ]; then
-            # .zshrc exists from non-josh installation
-
-            dst="$HOME/.zshrc-`date "+%Y.%m%d.%H%M"`-backup"
-            echo " + backup old .zshrc to $dst"
-
-            cp -L "$HOME/.zshrc" "$dst" || mv "$HOME/.zshrc" "$dst"
-            if [ $? -gt 0 ]; then
-                echo " - warning: backup $HOME/.zshrc failed"
-                return 4
-            fi
-            rm "$HOME/.zshrc"
-        fi
-        return 0
-    }
-
-
-    # ——— set current installation as main and link config
-
-    function rename_and_link() {
-        if [ "$OH_MY_ZSH" = "$ZSH" ]; then
-            return 1
-        fi
-
-        echo " + finally, rename $OH_MY_ZSH -> $ZSH"
-        mv "$OH_MY_ZSH" "$ZSH" && ln -s ../plugins/josh/themes/josh.zsh-theme $ZSH/custom/themes/josh.zsh-theme
-
-        dst="`date "+%Y.%m%d.%H%M"`.bak"
-        mv "$HOME/.zshrc" "$HOME/.zshrc-$dst" 2>/dev/null
-
-        ln -s $ZSH/custom/plugins/josh/.zshrc $HOME/.zshrc
-        if [ $? -gt 0 ]; then
-            echo " - fatal: can't create symlink $ZSH/custom/plugins/josh/.zshrc -> $HOME/.zshrc"
-            return 1
-        fi
+        printf " ++ info ($0): total ${#OH_MY_ZSH_PACKAGES[@]} plugins\n" >&2
         return 0
     }
 fi
