@@ -49,8 +49,8 @@ local this="$(fs.ash.self "$0" 'boot/init.sh')"
 if [[ "${sourced[(Ie)$this]}" -eq 0 ]]; then
     sourced+=("$this")
 
-    fs.ash.lin '/usr/dash'
-    fs.ash.lin '/usr/dash' 'dash12'
+    fs.ash.link '/usr/dash'
+    fs.ash.link '/usr/dash' 'dash12'
 
     if [ -n "$(uname | grep -i freebsd)" ]; then
         export ASH_PLATFORM="bsd"
