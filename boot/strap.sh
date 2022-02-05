@@ -42,7 +42,7 @@ else
             printf " ** halt ($0): $ASH isn't clean, have changes\n" >&2
             return 1
 
-        if [ -x "`which git-restore-mtime`" ]; then
+        elif [ -x "`which git-restore-mtime`" ]; then
             git-restore-mtime --skip-missing --quiet
         fi
 
