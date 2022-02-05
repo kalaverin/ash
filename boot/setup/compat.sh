@@ -114,7 +114,7 @@ function compat.version_is_greather {
 }
 
 
-function compat.check() {
+function compat.check {
     if [ -n "$(uname | grep -i freebsd)" ]; then
         printf " ++ info ($0): platform FreeBSD (`uname -srv`)\n" >&2
         export ASH_PLATFORM="bsd"

@@ -65,9 +65,12 @@ else
     }
 
     function boot.copy_config {
-        dst="$HOME/.zshrc.`date "%Y.%m%d.%H%M"`"
+        dst="$HOME/.zshrc.`+date "%Y.%m%d.%H%M"`"
+        if [ -z "$dst"] || [ "$?" -gt 0 ]; then
+            printf "something"
+            return 1
 
-        if [ -L "$HOME/.zshrc" ]; then
+        elif [ -L "$HOME/.zshrc" ]; then
             # .zshrc is link
             echo " + move .zshrc link to $dst"
 
