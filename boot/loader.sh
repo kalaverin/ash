@@ -160,7 +160,7 @@ else
             return 1
 
         elif [ -z "$ASH" ]; then
-            printf " ** halt ($0): ash root '$ASH' isn't defined\n" >&2
+            printf " ** halt ($0): kalash root '$ASH' isn't defined\n" >&2
             return 1
         fi
 
@@ -170,10 +170,15 @@ else
             return 2
         fi
 
-        local ashed="$(fs.path $1)"
+        local ashed="$(fs.path $ASH)"
+        if [[ ! "$result" -regex-match "^$ashed" ]]; then
+            printf " ++ warn ($0): source '$1' not in '$ashed'\n" >&2
+            return 2
+        fi
+
         let length="${#result} - ${#ashed} - 2"
         local result="${result[${#result} - $length,${#result}]}"
-        if [ ! -e "$result" ]; then
+        if [ ! -e "$ASH/$result" ]; then
             printf " ** halt ($0): something wrong '$1' -> '$result'\n" >&2
             return 3
         fi
