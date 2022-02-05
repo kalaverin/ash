@@ -44,25 +44,22 @@ fi
 
 
 [ -z "$sourced" ] && declare -aUg sourced=()
-local this="$(fs.ash.self "$0" 'boot/init.sh')"
-
-
- # || fs.ash.link '/bin/zsh'
 
 
 if [[ "${sourced[(Ie)$this]}" -eq 0 ]]; then
+    echo 'lol'
     sourced+=("$this")
 
     if [ -n "$(uname | grep -i freebsd)" ]; then
         export ASH_PLATFORM="bsd"
-        fs.ash.link '/usr/local/bin/gnuls' 'ls'   >/dev/null
-        fs.ash.link '/usr/local/bin/grep'  'grep' >/dev/null
+        fs.ash.link '/usr/local/bin/gnuls' 'ls'   
+        fs.ash.link '/usr/local/bin/grep'  'grep' 
 
 
     elif [ -n "$(uname | grep -i darwin)" ]; then
         export ASH_PLATFORM="mac"
-        fs.ash.link '/usr/local/bin/gls'   'ls'   >/dev/null
-        fs.ash.link '/usr/local/bin/ggrep' 'grep' >/dev/null
+        fs.ash.link '/usr/local/bin/gls'   'ls'   
+        fs.ash.link '/usr/local/bin/ggrep' 'grep' 
         export PATH="$PATH:/Library/Apple/usr/bin"
 
     else
@@ -76,15 +73,15 @@ if [[ "${sourced[(Ie)$this]}" -eq 0 ]]; then
     fi
 
     if [ "$ASH_PLATFORM" = 'bsd' ] || [ "$ASH_PLATFORM" = 'mac' ]; then
-        fs.ash.link '/usr/local/bin/gcut'      'cut'      >/dev/null
-        fs.ash.link '/usr/local/bin/gfind'     'find'     >/dev/null
-        fs.ash.link '/usr/local/bin/ghead'     'head'     >/dev/null
-        fs.ash.link '/usr/local/bin/greadlink' 'readlink' >/dev/null
-        fs.ash.link '/usr/local/bin/grealpath' 'realpath' >/dev/null
-        fs.ash.link '/usr/local/bin/gsed'      'sed'      >/dev/null
-        fs.ash.link '/usr/local/bin/gtail'     'tail'     >/dev/null
-        fs.ash.link '/usr/local/bin/gtar'      'tar'      >/dev/null
-        fs.ash.link '/usr/local/bin/gxargs'    'xargs'    >/dev/null
+        fs.ash.link '/usr/local/bin/gcut'      'cut'      
+        fs.ash.link '/usr/local/bin/gfind'     'find'     
+        fs.ash.link '/usr/local/bin/ghead'     'head'     
+        fs.ash.link '/usr/local/bin/greadlink' 'readlink' 
+        fs.ash.link '/usr/local/bin/grealpath' 'realpath' 
+        fs.ash.link '/usr/local/bin/gsed'      'sed'      
+        fs.ash.link '/usr/local/bin/gtail'     'tail'     
+        fs.ash.link '/usr/local/bin/gtar'      'tar'      
+        fs.ash.link '/usr/local/bin/gxargs'    'xargs'    
         export ASH_MD5_PIPE="`which md5`"
 
     else
