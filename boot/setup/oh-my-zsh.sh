@@ -82,8 +82,10 @@ else
             $git pull --ff-only --no-edit --no-commit --verbose origin $branch
 
             builtin cd "$CWD"
-
         fi
+
+        [ -x "`which git-restore-mtime`" ] && \
+            git-restore-mtime --skip-missing --work-tree "$OH_MY_ZSH/" --git-dir "$OH_MY_ZSH/.git/"
     }
 
 
