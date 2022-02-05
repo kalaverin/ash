@@ -44,7 +44,7 @@ fi
 
 
 [ -z "$sourced" ] && declare -aUg sourced=()
-
+local this="$(fs.ash.self "$0" 'boot/init.sh')"
 
 if [[ "${sourced[(Ie)$this]}" -eq 0 ]]; then
     echo "lol" $this $sources
