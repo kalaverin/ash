@@ -396,20 +396,20 @@ else
 
         else
             git=$commands[git]
-            ash_branch="${ASH_BRANCH:-"master"}"
-            ash_repo="${ASH_REPO:-"https://github.com/kalaverin/ash"}"
+            branch="${ASH_BRANCH:-"master"}"
+            repo="${ASH_REPO:-"https://github.com/kalaverin/ash"}"
 
             if [ ! -d "$ASH" ]; then
-                printf " ++ warn ($0): initial deploy from $ash_repo/$ash_branch to $ASH\n" >&2
+                printf " ++ warn ($0): initial deploy from $repo/$branch to $ASH\n" >&2
                 $git \
                     clone --depth 1 \
-                    --single-branch --branch "$ash_branch" \
-                    "$ash_repo" \
+                    --single-branch --branch "$branch" \
+                    "$repo" \
                     "$ASH"
                 local ret="$?"
 
             else
-                printf " ++ info ($0): pull from $ash_repo/$ash_branch to $ASH\n" >&2
+                printf " ++ info ($0): pull from $repo/$branch to $ASH\n" >&2
 
                 CWD="$PWD" && builtin cd "$ASH"
 
@@ -417,10 +417,10 @@ else
                 modified="$(git ls-files --modified  "$current")$(git ls-files --deleted --others --exclude-standard "$current")"
 
                 if [ -z "$modified" ]; then
-                    $git fetch origin -fu "$ash_branch":"$ash_branch" && \
+                    $git fetch origin -fu "$branch":"$branch" && \
                     $git reset --hard && \
-                    $git checkout --force --quiet $ash_branch && \
-                    $git pull --ff-only --no-edit --no-commit --verbose origin $ash_branch
+                    $git checkout --force --quiet $branch && \
+                    $git pull --ff-only --no-edit --no-commit --verbose origin $branch
                     local ret="$?"
                 else
                     printf " ** halt ($0): $ASH isn't clean, have changes\n" >&2
