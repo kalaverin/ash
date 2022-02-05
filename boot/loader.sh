@@ -4,7 +4,7 @@ if [ -z "$ZSH_VERSION" ]; then
     if [ ! -x "`which zsh`" ]; then
         printf " ** halt ($0): I was made for zsh, not for $cmd; please, install zsh\n" >&2
     else
-        printf " ** halt ($0): I was made for zsh, not for $cmd; please change default shell: \"sudo chsh -s /usr/bin/zsh $USER\" and run again\n" >&2
+        printf " ** halt ($0): I was made for zsh, not for $cmd; please change default shell: \"sudo chsh -s `which zsh` $USER\" and run again\n" >&2
     fi
 
 elif [ -n "$SUDO_USER" ] && [ ! "$SUDO_USER" = "$USER" ]; then
@@ -17,6 +17,7 @@ else
     zmodload zsh/stat
     zmodload zsh/datetime
     zmodload zsh/parameter
+    zmodload zsh/pcre
 
 
     function fs.stat.mtime {
@@ -216,7 +217,7 @@ else
             return 2
         fi
 
-        if [ ! "$src" = "$dst" ]; then
+        if [ "$src" != "$dst" ]; then
             printf " -- info ($0): user home '$src' really locate in '$dst'\n" >&2
         fi
         printf "$dst"
@@ -251,7 +252,7 @@ else
             local src="$dir/$2"
         fi
 
-        if [ -L "$src" ] && [ ! "$dst" = "$(fs.path "$src")" ]; then
+        if [ -L "$src" ] && [ "$dst" != "$(fs.path "$src")" ]; then
             printf " ++ warn ($0): source '$src' with target '$dst' point to '$(fs.path "$src")' (we are unlink that)\n" >&2
             unlink "$src"
         fi
@@ -307,7 +308,7 @@ else
             printf " ++ warn ($0): kalash root '$ASH' isn't defined\n" >&2
         fi
 
-        if [ -L "$ASH/bin/$1" ]; then
+        if [ -n "$ASH" ] && [ -L "$ASH/bin/$1" ]; then
             printf "$ASH/bin/$1"
             return 0
 
@@ -396,12 +397,31 @@ else
             ash_branch="${ASH_BRANCH:-"master"}"
             ash_repo="${ASH_REPO:-"https://github.com/kalaverin/ash"}"
 
-            printf " ++ warn ($0): initial deploy $ash_branch from $ash_repo to $ASH\n" >&2
-            $commands[git] \
-                clone --depth 1 \
-                --single-branch --branch "$ash_branch" \
-                "$ash_repo" \
-                "$ASH"
+            if [ ! -d "$ASH" ]; then
+                printf " ++ warn ($0): initial deploy from $ash_repo/$ash_branch to $ASH\n" >&2
+                $commands[git] \
+                    clone --depth 1 \
+                    --single-branch --branch "$ash_branch" \
+                    "$ash_repo" \
+                    "$ASH"
+                local ret="$?"
+
+            else
+                CWD="$PWD"
+                builtin cd "$ASH" && \
+                $commands[git] pull --ff-only --no-edit --no-commit --verbose origin $ash_branch
+                local ret="$?"
+                builtin cd "$CWD"
+            fi
+
+            if [ "$?" -eq 0 ]; then
+                source $ASH/boot/setup/compat.sh && \
+                    compat.check && \
+                source $ASH/BOOT/strap.sh && \
+                    check_compatibility
+
+                builtin cd "$HOME" && exec zsh
+            fi
         fi
     fi
 fi
