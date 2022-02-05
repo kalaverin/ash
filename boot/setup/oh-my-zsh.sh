@@ -34,11 +34,9 @@ if [ -z "$ZSH_VERSION" ]; then
 else
     zmodload zsh/datetime
 
-    if [[ "$0" =~ "/zsh$" ]]; then
-        local this='boot/setup/oh-my-zsh.sh'
-    else
-        local this="$(fs.ash.path "$0")"
-    fi
+
+    local this="$(fs.path.self "$0", 'boot/setup/oh-my-zsh.sh')"
+
 
     function deploy.ohmyzsh() {
         if [ -z "$ASH_HTTP" ]; then

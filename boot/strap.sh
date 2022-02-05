@@ -8,11 +8,8 @@ if [ -z "$ZSH_VERSION" ]; then
     fi
 
 else
-    if [[ "$0" =~ "/zsh$" ]]; then
-        local this='boot/setup/oh-my-zsh.sh'
-    else
-        local this="$(fs.ash.path "$0")"
-    fi
+    local this="$(fs.path.self "$0", 'boot/strap.sh')"
+
 
     function boot.strap {
         if [ -z "$ASH" ]; then
@@ -36,7 +33,7 @@ else
             return 1
         fi
 
-        printf " ++ info ($0): get last '$branch' commits to '$ASH'\n" >&2
+        printf " ++ info ($0): fetch last @$branch commits to $ASH\n" >&2
 
         $git pull --ff-only --no-edit --no-commit origin "$branch" || return 1
 

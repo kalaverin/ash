@@ -383,16 +383,6 @@ else
     #
 
 
-    if [[ "$0" =~ "/zsh$" ]]; then
-        local this='boot/loader.sh'
-    else
-        local this="$(fs.ash.path "$0")"
-    fi
-
-
-    #
-
-
     if [ -z "$ASH" ]; then
         local dir="$(fs.home)"
         if [ -d "$dir" ] && [ -x "$dir" ] && [ ! "$dir" = "$HOME" ]; then
@@ -404,7 +394,38 @@ else
         export ASH="$HOME/${ASH_SUBDIR:-.kalash}"
     fi
 
-    if [ ! -f "$ASH/boot/strap.sh" ]; then
+    function fs.path.self {
+        if [ -z "$1" ]; then
+            printf " ** halt ($0): call without args, I need to do — what?\n" >&2
+            return 1
+
+        elif [ -z "$ASH" ]; then
+            printf " ++ warn ($0): kalash root '$ASH' isn't defined\n" >&2
+
+        fi
+
+        if [[ "$1" =~ "/zsh$" ]]; then
+            if [ -n "$2" ]; then
+                local result='boot/loader.sh'
+            else
+                local result="$1"
+            fi
+        else
+            local result="$(fs.ash.path "$10")"
+            [ -z "$result" ] && local result="$0"
+        fi
+
+        if [ -z "$result" ]; then
+            printf " ** halt ($0): something wrong, '$1' ($ASH) + '$2' -> '$result'\n" >&2
+            return 2
+        fi
+
+        printf "$result"
+    }
+
+    local this="$(fs.path.self "$0", 'boot/loader.sh')"
+
+    # if [ ! -f "$ASH/boot/strap.sh" ]; then
         if [ -z "$commands[git]" ]; then
             printf " ** halt ($this): git must be installed\n" >&2
 
@@ -446,12 +467,12 @@ else
             if [ "$ret" -eq 0 ]; then
                 source $ASH/boot/strap.sh && \
                     boot.strap && \
-                builtin cd "$HOME" && exec zsh
+                # builtin cd "$HOME" && exec zsh
             fi
         fi
-    fi
+    # fi
 
     fs.path.rebuild
     function which { eval "fs.path.which $@"; return "$?" }
-    source $ASH/boot/init.sh
+    source "$ASH/boot/init.sh"
 fi

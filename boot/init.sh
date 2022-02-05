@@ -44,13 +44,7 @@ fi
 
 
 [ -z "$sourced" ] && declare -aUg sourced=()
-
-
-if [[ "$0" =~ "/zsh$" ]]; then
-    local this='boot/init.sh'
-else
-    local this="$(fs.ash.path "$0")"
-fi
+local this="$(fs.path.self "$0", 'boot/init.sh')"
 
 
 fs.ash.link.exists '/bin/zsh' # || fs.ash.link '/bin/zsh'
