@@ -106,7 +106,7 @@ else
             if [ ! -d "$dst/.git" ]; then
                 local verb='clone'
 
-                GIT_TERMINAL_PROMPT=0 $git clone --depth 1 $pkg
+                $commands[zsh] -c "GIT_TERMINAL_PROMPT=0 $git clone --depth 1 $pkg"
 
                 if [ "$?" -gt 0 ]; then
                     printf " ** fail ($0): clone $pkg to '$dst'\n" >&2
