@@ -1,19 +1,19 @@
 if [ -z "$ASH_HTTP" ]; then
     if [ -x "`which curl`" ]; then
         export ASH_HTTP="`which curl` -fsSL"
-        printf " ++ info ($this): using curl `curl --version | head -n 1 | awk '{print $2}'`: $ASH_HTTP" 1>&2
+        printf " ++ info ($this): using curl `curl --version | head -n 1 | awk '{print $2}'`: $ASH_HTTP\n" 1>&2
 
     elif [ -x "`which wget`" ]; then
         export ASH_HTTP="`which wget` -qO -"
-        printf " ++ info ($this): using wget `wget --version | head -n 1 | awk '{print $3}'`: $ASH_HTTP" 1>&2
+        printf " ++ info ($this): using wget `wget --version | head -n 1 | awk '{print $3}'`: $ASH_HTTP\n" 1>&2
 
     elif [ -x "`which fetch`" ]; then
         export ASH_HTTP="`which fetch` -qo - "
-        printf " ++ info ($this): using fetch: $ASH_HTTP" 1>&2
+        printf " ++ info ($this): using fetch: $ASH_HTTP\n" 1>&2
 
     elif [ -x "`which http`" ]; then
         export ASH_HTTP="`which http` -FISb"
-        printf " ++ info ($this): using httpie `http --version`: $ASH_HTTP" 1>&2
+        printf " ++ info ($this): using httpie `http --version`: $ASH_HTTP\n" 1>&2
 
     else
         unset ASH_HTTP

@@ -512,8 +512,12 @@ else
                     printf " ** fail ($this): $ASH isn't clean, have changes\n" >&2
                     local ret=1
                 fi
+
                 builtin cd "$CWD"
             fi
+
+            [ -x "`which git-restore-mtime`" ] && \
+                git-restore-mtime --skip-missing --work-tree "$ASH/" --git-dir "$ASH/.git/"
 
             if [ "$ret" -eq 0 ]; then
                 source $ASH/boot/strap.sh && \
