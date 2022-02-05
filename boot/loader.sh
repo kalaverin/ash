@@ -303,7 +303,14 @@ else
                 fi
                 return 1
             else
-                # zsh checks for link zsh found and valid
+                if [ -L "$ASH/bin/$1" ]; then
+                    local src="$(fs.path "$1")"
+                    if [ -x "$src" ]; then
+                        printf "$src"
+                        return 0
+                    fi
+                fi
+                return 1
             fi
         else
             echo '' >&2
