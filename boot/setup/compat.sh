@@ -250,7 +250,7 @@ function compat.check() {
         fi
     else
 
-        printf " -- info ($0): requirements resolved, executives ($req_bins $req_sys_bins), libraries ($req_libs $req_sys_libs)\n" >&2
+        printf " -- info ($0): requirements resolved, executives: $req_bins $req_sys_bins, libraries: $req_libs $req_sys_libs\n" >&2
     fi
     return 0
 }

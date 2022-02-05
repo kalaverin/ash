@@ -395,12 +395,13 @@ else
             printf " ** halt ($0): git must be installed\n" >&2
 
         else
+            git=$commands[git]
             ash_branch="${ASH_BRANCH:-"master"}"
             ash_repo="${ASH_REPO:-"https://github.com/kalaverin/ash"}"
 
             if [ ! -d "$ASH" ]; then
                 printf " ++ warn ($0): initial deploy from $ash_repo/$ash_branch to $ASH\n" >&2
-                $commands[git] \
+                $git \
                     clone --depth 1 \
                     --single-branch --branch "$ash_branch" \
                     "$ash_repo" \
@@ -409,17 +410,17 @@ else
 
             else
                 printf " ++ info ($0): pull from $ash_repo/$ash_branch to $ASH\n" >&2
-                CWD="$PWD"
-                builtin cd "$ASH" && \
+
+                CWD="$PWD" && builtin cd "$ASH"
 
                 current="`git rev-parse --show-toplevel`"
                 modified="$(git ls-files --modified  "$current")$(git ls-files --deleted --others --exclude-standard "$current")"
 
                 if [ -z "$modified" ]; then
-                    $commands[git] fetch origin -fu "$ash_branch":"$ash_branch" && \
-                    $commands[git] reset --hard && \
-                    $commands[git] checkout --force --quiet $ash_branch && \
-                    $commands[git] pull --ff-only --no-edit --no-commit --verbose origin $ash_branch
+                    $git fetch origin -fu "$ash_branch":"$ash_branch" && \
+                    $git reset --hard && \
+                    $git checkout --force --quiet $ash_branch && \
+                    $git pull --ff-only --no-edit --no-commit --verbose origin $ash_branch
                     local ret="$?"
                 else
                     printf " ** halt ($0): $ASH isn't clean, have changes\n" >&2
