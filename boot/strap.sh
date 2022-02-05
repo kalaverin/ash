@@ -65,7 +65,9 @@ else
     }
 
     function boot.copy_config {
-        dst="$HOME/.zshrc.$(date "+%Y.%m%d.%H%M")"
+        dst="$HOME/.zshrc.$(date '+%Y.%m%d.%H%M')"
+
+        echo ">$dst<"
 
         if [ -z "$dst" ] || [ "$?" -gt 0 ]; then
             printf "something"
