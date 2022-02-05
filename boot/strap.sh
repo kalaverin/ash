@@ -69,8 +69,12 @@ else
 
         echo ">$dst<"
 
-        if [ -z "$dst" ] || [ "$?" -gt 0 ]; then
+        if [ -z "$dst" ]; then
             printf "something"
+            return 2
+
+        elif [ "$?" -gt 0 ]; then
+            printf "something2"
             return 1
 
         elif [ -L "$HOME/.zshrc" ]; then
