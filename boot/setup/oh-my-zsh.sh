@@ -117,7 +117,7 @@ else
 
             else
                 let fetch_every="${ASH_UPDATE_ZSH_DAYS:-1} * 86400"
-                local last_fetch="`fs_mtime "$dst/.git/FETCH_HEAD" 2>/dev/null`"
+                local last_fetch="$(fs.stat.mtime "$dst/.git/FETCH_HEAD" 2>/dev/null)"
                 [ -z "$last_fetch" ] && local last_fetch=0
 
                 let need_fetch="$EPOCHSECONDS - $fetch_every > $last_fetch"
@@ -130,7 +130,7 @@ else
                         continue
 
                     else
-                        $commands[zsh] -c "GIT_TERMINAL_PROMPT=0 $git --git-dir='$dst/.git' --work-tree='$dst/'' pull origin '$branch'"
+                        $commands[zsh] -c "GIT_TERMINAL_PROMPT=0 $git --git-dir='$dst/.git' --work-tree='$dst/' pull origin '$branch'"
                         [ -x "`which git-restore-mtime`" ] && \
                             git-restore-mtime --skip-missing --work-tree "$dst/" --git-dir "$dst/.git/"
                     fi
