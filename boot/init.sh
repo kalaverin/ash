@@ -1,5 +1,5 @@
 if [[ ! "$0" =~ "/zsh$" ]]; then
-    local this="$(fs.path "$0")"
+    local this="$(fs.ash.path "$0")"
 else
     local this='boot/init.sh'
 fi

@@ -12,6 +12,7 @@ elif [ -n "$SUDO_USER" ] && [ ! "$SUDO_USER" = "$USER" ]; then
 
 elif [ -n "${(M)zsh_eval_context:#file}" ]; then
     printf " ** halt ($0): do not source me, just run me\n" >&2
+    source $ASH/boot/init.sh
 
 else
     zmodload zsh/stat
@@ -436,4 +437,5 @@ else
             fi
         fi
     fi
+    source $ASH/boot/init.sh
 fi

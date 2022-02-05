@@ -27,7 +27,7 @@ OH_MY_ZSH_PACKAGES=(
 
 function deploy.ohmyzsh() {
     if [ -z "$ASH_HTTP" ]; then
-        printf " ** halt ($0): HTTP getter undefnied\n" >&2
+        printf " ** halt ($0): HTTP getter undefined\n" >&2
         return 1
     fi
 
