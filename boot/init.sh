@@ -1,7 +1,7 @@
-if [[ ! "$0" =~ "/zsh$" ]]; then
-    local this="$(fs.ash.path "$0")"
-else
+if [[ "$0" =~ "/zsh$" ]]; then
     local this='boot/init.sh'
+else
+    local this="$(fs.ash.path "$0")"
 fi
 
 
@@ -53,14 +53,14 @@ if [[ "${sourced[(Ie)$this]}" -eq 0 ]]; then
 
     if [ -n "$(uname | grep -i freebsd)" ]; then
         export ASH_PLATFORM="bsd"
-        fs.ash.link '/usr/local/bin/gnuls'  'ls'   >/dev/null
-        fs.ash.link '/usr/local/bin/grep'   'grep' >/dev/null
+        fs.ash.link '/usr/local/bin/gnuls' 'ls'   >/dev/null
+        fs.ash.link '/usr/local/bin/grep'  'grep' >/dev/null
 
 
     elif [ -n "$(uname | grep -i darwin)" ]; then
         export ASH_PLATFORM="mac"
-        fs.ash.link '/usr/local/bin/gls'    'ls'   >/dev/null
-        fs.ash.link '/usr/local/bin/ggrep'  'grep' >/dev/null
+        fs.ash.link '/usr/local/bin/gls'   'ls'   >/dev/null
+        fs.ash.link '/usr/local/bin/ggrep' 'grep' >/dev/null
         export PATH="$PATH:/Library/Apple/usr/bin"
 
     else

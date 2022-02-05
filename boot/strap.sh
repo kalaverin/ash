@@ -1,3 +1,10 @@
+if [[ "$0" =~ "/zsh$" ]]; then
+    local this='boot/setup/oh-my-zsh.sh'
+else
+    local this="$(fs.ash.path "$0")"
+fi
+
+
 if [ -z "$ZSH_VERSION" ]; then
     cmd="`$(which ps) -p\$\$ -ocomm=`"
 

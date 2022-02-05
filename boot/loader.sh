@@ -377,6 +377,16 @@ else
     #
 
 
+    if [[ "$0" =~ "/zsh$" ]]; then
+        local this='boot/loader.sh'
+    else
+        local this="$(fs.ash.path "$0")"
+    fi
+
+
+    #
+
+
     if [ -z "$ASH" ]; then
         local dir="$(fs.home)"
         if [ -d "$dir" ] && [ -x "$dir" ] && [ ! "$dir" = "$HOME" ]; then
