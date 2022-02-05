@@ -47,11 +47,11 @@ fi
 local this="$(fs.ash.self "$0" 'boot/init.sh')"
 
 
-echo "`fs.ash.link.exists 'zsh'` zsh $?"
-echo "`fs.ash.link.exists '/bin/zsh'` /bin/zsh $?"
+echo "`fs.ash.link.is 'zsh'` zsh $?"
+echo "`fs.ash.link.is '/bin/zsh'` /bin/zsh $?"
 
-echo "`fs.ash.link.exists 'zsh' 'zsh'` zsh zsh$?"
-echo "`fs.ash.link.exists '/bin/zsh' 'zsh'` /bin/zsh zsh$?"
+echo "`fs.ash.link.is 'zsh' 'zsh'` zsh zsh$?"
+echo "`fs.ash.link.is '/bin/zsh' 'zsh'` /bin/zsh zsh$?"
 
 
  # || fs.ash.link '/bin/zsh'

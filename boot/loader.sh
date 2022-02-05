@@ -274,7 +274,7 @@ else
     }
 
 
-    function fs.ash.link.exists {
+    function fs.ash.link.is {
         if [ -z "$1" ]; then
             printf " ** halt ($0): call without args, I need to do — what?\n" >&2
             return 1
