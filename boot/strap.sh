@@ -46,7 +46,7 @@ else
             git-restore-mtime --skip-missing --quiet
         fi
 
-
+        source $ASH/boot/init.sh && \
         printf " ++ info ($0): works in $PWD, deploy and configure oh-my-zsh\n" >&2
         source $ASH/boot/setup/oh-my-zsh.sh && \
             deploy.ohmyzsh
